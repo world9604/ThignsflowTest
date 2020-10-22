@@ -45,15 +45,12 @@ public class GithubIssueListViewModel extends ViewModel {
                 .flatMap(Observable::fromIterable)
                 .map(GithubIssue::create)
                 .doOnNext(this::saveGithubIssues)
-                .flatMap(r -> {
-                    Observable.just(r.getGithubRepoid());
-                })
-                .onExceptionResumeNext(r -> {
-                    repository.getGithubIssues(r);
-                })
+                .flatMap(r ->
+                        repository.getGithubIssues(r.getGithubRepoid())
+                            .toObservable())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(githubIssue -> {
-//                    Log.d(GITHUB_TAG, "githubIssue : " + githubIssue.getTitle());
+                    Log.d(GITHUB_TAG, "githubIssue : " + githubIssue.getNumber());
                     githubIssueLiveData.setValue(githubIssue);
                 });
     }

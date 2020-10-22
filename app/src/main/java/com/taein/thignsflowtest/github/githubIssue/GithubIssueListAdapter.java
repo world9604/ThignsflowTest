@@ -42,7 +42,6 @@ public class GithubIssueListAdapter extends RecyclerView.Adapter<GithubIssueList
 
     public void add(GithubIssue githubIssue) {
         if (githubIssue != null) {
-            Log.d(GITHUB_TAG, "@@Adapter : " + githubIssue.getTitle());
             this.data.add(githubIssue);
             notifyItemInserted(0);
         }
