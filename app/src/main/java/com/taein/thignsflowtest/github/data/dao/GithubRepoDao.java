@@ -27,6 +27,6 @@ public interface GithubRepoDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(GithubRepo githubRepo);
 
-    @Query("SELECT * FROM github_issue WHERE github_repo_id = :id ORDER BY number")
+    @Query("SELECT * FROM github_issue WHERE github_repo_id = :id ORDER BY number DESC")
     Flowable<List<GithubIssue>> getGithubIssues(int id);
 }

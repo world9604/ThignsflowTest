@@ -3,7 +3,9 @@ package com.taein.thignsflowtest.github.githubIssue;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import androidx.databinding.BindingAdapter;
+
 import com.squareup.picasso.Picasso;
 
 

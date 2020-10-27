@@ -47,11 +47,9 @@ public class GithubIssueListAdapter extends RecyclerView.Adapter<GithubIssueList
         }
     }
 
-    public void add(MutableLiveData<GithubIssue> githubIssuesLiveData) {
-        if (githubIssuesLiveData.getValue() != null) {
-            this.data.add(0, githubIssuesLiveData.getValue());
-            notifyItemInserted(0);
-        }
+    public void clearItems() {
+        this.data.clear();
+        notifyDataSetChanged();
     }
 
     void setItem(List<GithubIssue> githubIssues) {

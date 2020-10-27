@@ -8,7 +8,9 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.EditText;
@@ -19,7 +21,13 @@ import com.taein.thignsflowtest.databinding.ActivityGithubIssueListBinding;
 import com.taein.thignsflowtest.github.utils.ErrorHandler;
 import com.taein.thignsflowtest.github.utils.ViewModelFactory;
 
+import java.util.Arrays;
+import java.util.List;
+
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.plugins.RxJavaPlugins;
+import io.reactivex.schedulers.Schedulers;
 
 public class GithubIssueListActivity extends AppCompatActivity {
 
@@ -46,12 +54,31 @@ public class GithubIssueListActivity extends AppCompatActivity {
         binding.githubIssueItemRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         setUpObservable();
+//        startWithTest();
     }
 
+    @SuppressLint("CheckResult")
+    private void startWithTest() {
+        final List<String> items = Arrays.asList("one", "two", "three", "four");
+        Observable.range(0, items.size())
+                .subscribeOn(Schedulers.io())
+                .flatMap(str -> Observable.just(str + "!!"))
+                .observeOn(AndroidSchedulers.mainThread())
+                .startWith("Top Priority Item")
+                .subscribe(resp -> Log.d(GITHUB_TAG, "startWithTest: " + resp));
+    }
+
+
     private void setUpObservable() {
+        // Adapter item 추가
         viewModel.getGithubIssueLiveData().observe(this, githubIssue -> {
-             Log.d(GITHUB_TAG, "setUpObservable number: " + githubIssue.getNumber());
             githubIssueListAdapter.add(githubIssue);
+        });
+
+        // Adapter item clear
+        viewModel.getClearItemsLiveData().observe(this, canClearItem -> {
+            Log.d(GITHUB_TAG, "Clear Items LiveData: " + canClearItem);
+            if (canClearItem) githubIssueListAdapter.clearItems();
         });
     }
 
