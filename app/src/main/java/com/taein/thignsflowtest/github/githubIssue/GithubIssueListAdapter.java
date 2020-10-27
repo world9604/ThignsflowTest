@@ -2,10 +2,12 @@ package com.taein.thignsflowtest.github.githubIssue;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.MutableLiveData;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.taein.thignsflowtest.R;
@@ -24,9 +26,7 @@ public class GithubIssueListAdapter extends RecyclerView.Adapter<GithubIssueList
     @NonNull
     @Override
     public GithubIssueListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        GithubIssueItemBinding binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()),
-                R.layout.github_issue_item, parent, false);
-
+        GithubIssueItemBinding binding = GithubIssueItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
         return new GithubIssueListViewHolder(binding);
     }
 
@@ -42,7 +42,14 @@ public class GithubIssueListAdapter extends RecyclerView.Adapter<GithubIssueList
 
     public void add(GithubIssue githubIssue) {
         if (githubIssue != null) {
-            this.data.add(githubIssue);
+            this.data.add(0, githubIssue);
+            notifyItemInserted(0);
+        }
+    }
+
+    public void add(MutableLiveData<GithubIssue> githubIssuesLiveData) {
+        if (githubIssuesLiveData.getValue() != null) {
+            this.data.add(0, githubIssuesLiveData.getValue());
             notifyItemInserted(0);
         }
     }
@@ -66,6 +73,7 @@ public class GithubIssueListAdapter extends RecyclerView.Adapter<GithubIssueList
 
         void bind(GithubIssue githubIssue) {
             binding.setGithubIssue(githubIssue);
+            binding.executePendingBindings();
         }
     }
 }

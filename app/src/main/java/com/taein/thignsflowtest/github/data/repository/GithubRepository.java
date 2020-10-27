@@ -63,7 +63,7 @@ public class GithubRepository {
         localDataSource.insert(githubIssue);
     }
 
-    public Flowable<GithubIssue> getGithubIssues(int repoId) {
+    public Flowable<List<GithubIssue>> getGithubIssues(int repoId) {
         return localDataSource.getGithubIssues(repoId);
     }
 }

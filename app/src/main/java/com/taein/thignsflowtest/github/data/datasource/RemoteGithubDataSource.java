@@ -45,7 +45,7 @@ public class RemoteGithubDataSource implements GithubDataSource{
     public void insert(GithubRepo githubRepo) {}
 
     @Override
-    public Flowable<GithubIssue> getGithubIssues(int repoId) {
+    public Flowable<List<GithubIssue>> getGithubIssues(int repoId) {
         return null;
     }
 }

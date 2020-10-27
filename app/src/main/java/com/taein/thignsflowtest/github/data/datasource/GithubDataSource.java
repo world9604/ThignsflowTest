@@ -18,5 +18,5 @@ public interface GithubDataSource {
 
     void insert(GithubRepo githubRepo);
 
-    Flowable<GithubIssue> getGithubIssues(int repoId);
+    Flowable<List<GithubIssue>> getGithubIssues(int repoId);
 }

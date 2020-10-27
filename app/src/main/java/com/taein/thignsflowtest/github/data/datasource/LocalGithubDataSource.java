@@ -52,7 +52,7 @@ public class LocalGithubDataSource implements GithubDataSource{
     }
 
     @Override
-    public Flowable<GithubIssue> getGithubIssues(int repoId) {
+    public Flowable<List<GithubIssue>> getGithubIssues(int repoId) {
         return githubRepoDao.getGithubIssues(repoId);
     }
 }

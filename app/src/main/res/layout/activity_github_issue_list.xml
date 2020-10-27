@@ -36,7 +36,6 @@
             android:layout_height="0dp"
             android:scrollbars="vertical"
             android:layout_marginTop="10dp"
-            bind:item="@{viewModel.githubIssueLiveData}"
             app:layout_constraintTop_toBottomOf="@+id/org_repo_name_tv"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"

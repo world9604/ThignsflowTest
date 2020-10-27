@@ -4,13 +4,16 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.EditText;
 
+import com.facebook.stetho.Stetho;
 import com.taein.thignsflowtest.R;
 import com.taein.thignsflowtest.databinding.ActivityGithubIssueListBinding;
 import com.taein.thignsflowtest.github.utils.ErrorHandler;
@@ -22,10 +25,13 @@ public class GithubIssueListActivity extends AppCompatActivity {
 
     public static final String GITHUB_TAG = "GITHUB_TAG";
     private GithubIssueListViewModel viewModel;
+    private GithubIssueListAdapter githubIssueListAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Stetho.initializeWithDefaults(this);
+
         ActivityGithubIssueListBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_github_issue_list);
         RxJavaPlugins.setErrorHandler(ErrorHandler.get());
 
@@ -34,10 +40,19 @@ public class GithubIssueListActivity extends AppCompatActivity {
         binding.setListener(getActionListener());
         binding.setLifecycleOwner(this);
 
-        GithubIssueListAdapter githubIssueListAdapter = new GithubIssueListAdapter();
+        githubIssueListAdapter = new GithubIssueListAdapter();
         binding.githubIssueItemRecyclerView.setHasFixedSize(true);
         binding.githubIssueItemRecyclerView.setAdapter(githubIssueListAdapter);
         binding.githubIssueItemRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        setUpObservable();
+    }
+
+    private void setUpObservable() {
+        viewModel.getGithubIssueLiveData().observe(this, githubIssue -> {
+             Log.d(GITHUB_TAG, "setUpObservable number: " + githubIssue.getNumber());
+            githubIssueListAdapter.add(githubIssue);
+        });
     }
 
     private GithubIssueActionListener getActionListener() {

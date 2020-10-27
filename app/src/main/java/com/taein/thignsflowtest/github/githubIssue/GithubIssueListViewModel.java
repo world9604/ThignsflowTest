@@ -14,8 +14,10 @@ import com.taein.thignsflowtest.github.utils.ErrorHandler;
 
 import java.util.List;
 
+import io.reactivex.Flowable;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import lombok.Data;
 
@@ -45,10 +47,11 @@ public class GithubIssueListViewModel extends ViewModel {
                 .flatMap(Observable::fromIterable)
                 .map(GithubIssue::create)
                 .doOnNext(this::saveGithubIssues)
-                .flatMap(r ->
-                        repository.getGithubIssues(r.getGithubRepoid())
-                            .toObservable())
-                .observeOn(AndroidSchedulers.mainThread())
+                .flatMap(r -> repository.getGithubIssues(r.getGithubRepoid())
+                        .toObservable()
+                        .take(1)
+                        .flatMap(Observable::fromIterable))
+                .observeOn(AndroidSchedulers.mainThread ())
                 .subscribe(githubIssue -> {
                     Log.d(GITHUB_TAG, "githubIssue : " + githubIssue.getNumber());
                     githubIssueLiveData.setValue(githubIssue);
@@ -78,5 +81,14 @@ public class GithubIssueListViewModel extends ViewModel {
                     Log.d(GITHUB_TAG, "getTitle : " + githubRepoWithIssuesVO.get(0).getNumber());
                     githubIssueLiveData.setValue(githubRepoWithIssuesVO);
                 });*/
+    }
+
+    @SuppressLint("CheckResult")
+    public void gugudanTest(int dan) {
+//        Function<Integer, Observable<String>> gugudan = num -> Observable.range(1, 9).map(row -> num + "*" + row + " = " + dan * row);
+        /*Observable.just(dan)
+                .flatMap(num ->
+                    Observable.range(1, 9).map(row -> num + "*" + row + " = " + dan * row))
+                .subscribe(System.out::println);*/
     }
 }

@@ -28,5 +28,5 @@ public interface GithubRepoDao {
     void insert(GithubRepo githubRepo);
 
     @Query("SELECT * FROM github_issue WHERE github_repo_id = :id ORDER BY number")
-    Flowable<GithubIssue> getGithubIssues(int id);
+    Flowable<List<GithubIssue>> getGithubIssues(int id);
 }
